@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 public class AuthenticateRequestDto implements Serializable {
 
-    @NotBlank
-    private String username;
-    @NotBlank
-    private String password;
+  @NotBlank
+  private String username;
+  @NotBlank
+  private String password;
 
 }

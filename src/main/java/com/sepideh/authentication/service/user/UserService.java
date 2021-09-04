@@ -60,10 +60,6 @@ public class UserService {
     );
   }
 
-  public User findById(long id) throws EntityNotFoundException {
-    return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-  }
-
   public Page<UserDto> getAllUser(Pageable pageable) {
     return userRepository.findAll(pageable)
         .map(userMapper::toDto);
@@ -79,6 +75,10 @@ public class UserService {
     userRepository.save(user);
 
     return true;
+  }
+
+  private User findById(long id) throws EntityNotFoundException {
+    return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
   }
 
 }
