@@ -12,10 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,7 +33,7 @@ public class UserController {
     this.userService = userService;
   }
 
-  @RequestMapping(value = {"/register", "/register/"}, method = RequestMethod.POST)
+  @PostMapping({"/register", "/register/"})
   public GenericRestResponse<UserDto> registerUser(
       @RequestBody @Valid RegisterUserDto registerUserDto
   ) {
@@ -41,7 +44,7 @@ public class UserController {
     );
   }
 
-  @RequestMapping(value = "", method = RequestMethod.PUT)
+  @PutMapping
   public GenericRestResponse<UserDto> update(
       @RequestBody @Valid UserDto userDto,
       Authentication authentication
@@ -53,7 +56,7 @@ public class UserController {
     );
   }
 
-  @RequestMapping(value = "/all", method = RequestMethod.GET)
+  @GetMapping("/all")
   public GenericRestResponse<List<UserDto>> getAllUser(
       @RequestParam("pageSize") int pageSize,
       @RequestParam("pageNumber") int pageNumber
@@ -68,7 +71,7 @@ public class UserController {
     );
   }
 
-  @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+  @DeleteMapping("/{id}")
   public GenericRestResponse<Boolean> delete(
       @PathVariable("id") long id,
       Authentication authentication
