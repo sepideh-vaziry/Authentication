@@ -6,13 +6,17 @@ import com.sepideh.authentication.mapper.user.UserMapper;
 import com.sepideh.authentication.model.user.User;
 import com.sepideh.authentication.model.user.UserRole;
 import com.sepideh.authentication.repository.UserRepository;
+import com.sepideh.authentication.repository.UserSpecificationsBuilder;
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -60,8 +64,18 @@ public class UserService {
     );
   }
 
-  public Page<UserDto> getAllUser(Pageable pageable) {
-    return userRepository.findAll(pageable)
+  public Page<UserDto> getAllUser(Pageable pageable, String search) {
+    UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
+    Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+    Matcher matcher = pattern.matcher(search + ",");
+
+    while (matcher.find()) {
+      builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+    }
+
+    Specification<User> specification = builder.build();
+
+    return userRepository.findAll(specification, pageable)
         .map(userMapper::toDto);
   }
 

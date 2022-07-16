@@ -59,9 +59,10 @@ public class UserController {
   @GetMapping("/all")
   public GenericRestResponse<List<UserDto>> getAllUser(
       @RequestParam("pageSize") int pageSize,
-      @RequestParam("pageNumber") int pageNumber
+      @RequestParam("pageNumber") int pageNumber,
+      @RequestParam(value = "search") String search
   ) {
-    Page<UserDto> page = userService.getAllUser(PageRequest.of(pageNumber, pageSize));
+    Page<UserDto> page = userService.getAllUser(PageRequest.of(pageNumber, pageSize), search);
 
     return new GenericRestResponse<>(
         page.getContent(),
